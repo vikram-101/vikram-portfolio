@@ -243,19 +243,5 @@ export default function Portfolio() {
               Have an interesting AI project or want to collaborate? My inbox is always open.
             </p>
             <a href="mailto:vt594925@gmail.com" style={{ display: "inline-block", fontSize: "0.88rem", fontWeight: 600, color: "#fff", background: "linear-gradient(135deg,#9333ea,#7c3aed)", padding: "0.88rem 2.5rem", borderRadius: "12px", textDecoration: "none", boxShadow: "0 8px 30px rgba(147,51,234,0.28)", marginBottom: "2.5rem" }}>
-              Say Hello ✉️
+              Say Hello
             </a>
-            <div style={{ fontSize: "0.75rem", color: "rgba(232,234,240,0.35)", marginTop: "2rem", letterSpacing: "0.5px" }}>
-              or connect with me on<br />
-              <a href="https://github.com/vikram-101" target="_blank" rel="noopener noreferrer" style={{ color: "#9333ea", textDecoration: "none" }}>GitHub</a> • <a href="https://linkedin.com/in/vikram-thakur" target="_blank" rel="noopener noreferrer" style={{ color: "#9333ea", textDecoration: "none" }}>LinkedIn</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <footer style={{ padding: "3rem 2rem", textAlign: "center", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-        <p style={{ fontSize: "0.75rem", color: "rgba(232,234,240,0.25)" }}>© 2024 Vikram Thakur. All rights reserved.</p>
-      </footer>
-    </div>
-  );
-}
