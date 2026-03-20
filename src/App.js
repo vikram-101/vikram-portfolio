@@ -1,149 +1,190 @@
 import { useState, useEffect } from "react";
 
 const skills = [
-  { icon: "🧠", name: "Machine Learning", desc: "Supervised & unsupervised learning, ensemble methods, model evaluation.", tags: ["Scikit-learn", "XGBoost", "Feature Eng."], color: "#9333ea" },
-  { icon: "🔥", name: "Deep Learning", desc: "CNNs, RNNs, Transformers. Trained on real datasets.", tags: ["PyTorch", "TensorFlow", "Keras"], color: "#ec4899" },
+  { icon: "🧠", name: "Machine Learning", desc: "Supervised & unsupervised learning, ensemble methods, feature engineering.", tags: ["Scikit-learn", "XGBoost", "Feature Eng."], color: "#9333ea" },
+  { icon: "🔥", name: "Deep Learning", desc: "CNNs, RNNs, Transformers — trained on real-world datasets.", tags: ["PyTorch", "TensorFlow", "Keras"], color: "#ec4899" },
   { icon: "💬", name: "NLP", desc: "Text embeddings, sentiment analysis, fine-tuned language models.", tags: ["BERT", "HuggingFace", "NLTK"], color: "#06b6d4" },
   { icon: "👁️", name: "Computer Vision", desc: "Image classification, object detection, real-time inference.", tags: ["OpenCV", "YOLO", "CNN"], color: "#10b981" },
-  { icon: "🐍", name: "Python & Data", desc: "NumPy, Pandas, Matplotlib — full data science stack.", tags: ["NumPy", "Pandas", "Plotly"], color: "#f59e0b" },
-  { icon: "📊", name: "MLOps Basics", desc: "Experiment tracking, model versioning, Streamlit apps.", tags: ["MLflow", "Streamlit", "Git"], color: "#f43f5e" },
+  { icon: "🐍", name: "Python & Data", desc: "NumPy, Pandas, Matplotlib — the full data science stack.", tags: ["NumPy", "Pandas", "Plotly"], color: "#f59e0b" },
+  { icon: "📊", name: "MLOps Basics", desc: "Experiment tracking, model versioning, Streamlit deployments.", tags: ["MLflow", "Streamlit", "Git"], color: "#a855f7" },
 ];
 
 const projects = [
-  { num: "01", name: "Insurance Cost Predictor", badges: ["Machine Learning", "Streamlit"], desc: "ML-powered web app that predicts insurance charges based on age, BMI, smoking habits & region. Built with Scikit-learn & deployed via Streamlit.", colors: ["#9333ea", "#ec4899"], github: "https://github.com/vikram-101/insurance-predictor", demo: "https://insurance-predictor-2-omxp.onrender.com/" },
-  { num: "02", name: "Emotion Detector", badges: ["Computer Vision", "Deep Learning"], desc: "Real-time facial emotion recognition using CNN on FER-2013. Detects 7 emotions live via webcam with 85%+ accuracy.", colors: ["#06b6d4", "#9333ea"], github: "", demo: "" },
+  { num: "01", name: "Insurance Cost Predictor", badges: ["Machine Learning", "Streamlit"], desc: "ML-powered web app that predicts insurance charges based on age, BMI, smoking habits & region. Built with Scikit-learn & deployed on Render.", colors: ["#9333ea", "#ec4899"], github: "https://github.com/vikram-101/insurance-predictor", demo: "https://insurance-predictor-2-omxp.onrender.com/" },
+  { num: "02", name: "Emotion Detector", badges: ["Computer Vision", "Deep Learning"], desc: "Real-time facial emotion recognition using CNN trained on FER-2013. Detects 7 emotions live via webcam with 85%+ accuracy.", colors: ["#06b6d4", "#9333ea"], github: "", demo: "" },
   { num: "03", name: "Sentiment Analyzer", badges: ["NLP", "BERT"], desc: "Fine-tuned BERT on 50K tweets to classify sentiment. Clean Streamlit dashboard for live inference.", colors: ["#10b981", "#06b6d4"], github: "", demo: "" },
 ];
 
 export default function Portfolio() {
   const [visible, setVisible] = useState({});
+  const [activeNav, setActiveNav] = useState("hero");
 
   const scrollTo = (id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
-
-
   useEffect(() => {
     const obs = new IntersectionObserver(
       (entries) => entries.forEach(e => {
-        if (e.isIntersecting) setVisible(v => ({ ...v, [e.target.dataset.id]: true }));
+        if (e.isIntersecting) {
+          setVisible(v => ({ ...v, [e.target.dataset.id]: true }));
+          if (e.target.id) setActiveNav(e.target.id);
+        }
       }),
       { threshold: 0.1 }
     );
     document.querySelectorAll("[data-id]").forEach(el => obs.observe(el));
+    document.querySelectorAll("section[id]").forEach(el => obs.observe(el));
     return () => obs.disconnect();
   }, []);
 
-  const fadeUp = (id, delay = 0) => ({
+  const fade = (id, delay = 0) => ({
     opacity: visible[id] ? 1 : 0,
-    transform: visible[id] ? "translateY(0)" : "translateY(30px)",
-    transition: `opacity 0.7s ${delay}s ease, transform 0.7s ${delay}s ease`,
+    transform: visible[id] ? "translateY(0px)" : "translateY(24px)",
+    transition: `opacity 0.8s ${delay}s cubic-bezier(0.16,1,0.3,1), transform 0.8s ${delay}s cubic-bezier(0.16,1,0.3,1)`,
   });
 
   return (
-    <div style={{ background: "#04040a", color: "#f1f5f9", fontFamily: "'Segoe UI', system-ui, sans-serif", minHeight: "100vh", overflowX: "hidden" }}>
+    <div style={{ background: "#060609", color: "#e8eaf0", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", minHeight: "100vh", overflowX: "hidden" }}>
 
-      {/* Aurora blobs */}
-      <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
-        {[
-          { w: 500, h: 500, bg: "rgba(147,51,234,0.12)", top: "-100px", left: "-100px" },
-          { w: 400, h: 400, bg: "rgba(236,72,153,0.08)", top: "35%", right: "-100px" },
-          { w: 350, h: 350, bg: "rgba(6,182,212,0.07)", bottom: "0", left: "30%" },
-        ].map((b, i) => (
-          <div key={i} style={{ position: "absolute", width: b.w, height: b.h, background: b.bg, borderRadius: "50%", filter: "blur(100px)", top: b.top, left: b.left, right: b.right, bottom: b.bottom }} />
-        ))}
+      {/* BG glow */}
+      <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}>
+        <div style={{ position: "absolute", width: 700, height: 700, borderRadius: "50%", background: "radial-gradient(circle, rgba(147,51,234,0.07) 0%, transparent 70%)", top: -200, left: -150 }} />
+        <div style={{ position: "absolute", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(236,72,153,0.05) 0%, transparent 70%)", bottom: 100, right: -100 }} />
       </div>
 
       {/* NAV */}
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, padding: "1.2rem 2.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", background: "rgba(4,4,10,0.8)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
-        <div style={{ fontWeight: 800, fontSize: "1.1rem", letterSpacing: "3px", textTransform: "uppercase", background: "linear-gradient(90deg,#fff,rgba(255,255,255,0.5))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-          VIKRAM
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, height: "58px", padding: "0 2.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", background: "rgba(6,6,9,0.88)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ fontWeight: 700, fontSize: "1rem", color: "#fff", letterSpacing: "0.3px" }}>
+          Vikram<span style={{ color: "#9333ea" }}>.</span>
         </div>
-        <div style={{ display: "flex", gap: "0.3rem", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "100px", padding: "0.35rem" }}>
-          {[["About","hero"],["Skills","skills"],["Work","work"],["Contact","contact"]].map(([label,id]) => (
-            <button key={label} onClick={() => scrollTo(id)} style={{ fontSize: "0.65rem", letterSpacing: "1px", textTransform: "uppercase", color: "rgba(241,245,249,0.4)", background: "transparent", border: "none", padding: "0.4rem 0.9rem", borderRadius: "100px", transition: "all 0.2s", cursor: "pointer" }}
-              onMouseEnter={e => { e.target.style.background = "rgba(255,255,255,0.08)"; e.target.style.color = "#f1f5f9"; }}
-              onMouseLeave={e => { e.target.style.background = "transparent"; e.target.style.color = "rgba(241,245,249,0.4)"; }}>
-              {label}
+        <div style={{ display: "flex", gap: "0.2rem" }}>
+          {[["About","about"],["Skills","skills"],["Work","work"],["Contact","contact"]].map(([l,id]) => (
+            <button key={id} onClick={() => scrollTo(id)} style={{ fontSize: "0.8rem", fontWeight: 500, color: activeNav === id ? "#fff" : "rgba(232,234,240,0.4)", background: "transparent", border: "none", padding: "0.45rem 0.9rem", borderRadius: "7px", cursor: "pointer", transition: "color 0.2s" }}
+              onMouseEnter={e => e.target.style.color="#fff"}
+              onMouseLeave={e => e.target.style.color = activeNav===id ? "#fff" : "rgba(232,234,240,0.4)"}>
+              {l}
             </button>
           ))}
         </div>
+        <a href="mailto:vt594925@gmail.com" style={{ fontSize: "0.78rem", fontWeight: 600, color: "#fff", background: "#7c3aed", padding: "0.45rem 1.1rem", borderRadius: "8px", textDecoration: "none" }}>
+          Hire Me
+        </a>
       </nav>
 
       {/* HERO */}
-      <section id="about" style={{ position: "relative", zIndex: 1, minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "8rem 2rem 4rem", textAlign: "center" }}>
-
-        {/* Status pill */}
-        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "100px", padding: "0.5rem 1.2rem", fontSize: "0.65rem", letterSpacing: "2px", color: "rgba(241,245,249,0.5)", marginBottom: "2.5rem", opacity: 1 }}>
-          <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#10b981", boxShadow: "0 0 10px #10b981", display: "inline-block" }} />
-          Available for internships &amp; collabs
+      <section id="hero" style={{ position: "relative", zIndex: 1, minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "7rem 2rem 4rem", textAlign: "center" }}>
+        <div data-id="h1" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(147,51,234,0.1)", border: "1px solid rgba(147,51,234,0.2)", borderRadius: "100px", padding: "0.38rem 1rem", fontSize: "0.72rem", color: "rgba(232,234,240,0.55)", marginBottom: "2.5rem", ...fade("h1") }}>
+          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981", boxShadow: "0 0 8px #10b981", display: "inline-block" }} />
+          Open to Internships &amp; Collaborations
         </div>
 
-        {/* Big heading */}
-        <h1 style={{ fontSize: "clamp(3rem, 9vw, 7.5rem)", fontWeight: 900, lineHeight: 0.95, letterSpacing: "-3px", marginBottom: "1.5rem" }}>
-          <span style={{ display: "block", color: "#f1f5f9" }}>Building</span>
-          <span style={{ display: "block", background: "linear-gradient(90deg, #9333ea, #ec4899, #06b6d4)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Intelligent</span>
-          <span style={{ display: "block", color: "#f1f5f9" }}>Systems.</span>
-        </h1>
-
-        <p style={{ maxWidth: 500, color: "rgba(241,245,249,0.5)", fontSize: "1.05rem", lineHeight: 1.8, marginBottom: "2rem", fontStyle: "italic" }}>
-          I turn raw data into thinking machines — exploring AI, ML, and the algorithms that make computers learn.
-        </p>
-
-        {/* Chips */}
-        <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap", justifyContent: "center", marginBottom: "2.5rem" }}>
-          {["Machine Learning", "Deep Learning", "NLP", "Computer Vision", "Python"].map(s => (
-            <span key={s} style={{ fontSize: "0.65rem", letterSpacing: "1px", textTransform: "uppercase", padding: "0.35rem 0.9rem", borderRadius: "4px", border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.03)", color: "rgba(241,245,249,0.45)" }}>{s}</span>
-          ))}
+        <div data-id="h2" style={{ ...fade("h2", 0.1) }}>
+          <h1 style={{ fontSize: "clamp(3rem, 9vw, 7.5rem)", fontWeight: 800, lineHeight: 0.95, letterSpacing: "-3px", color: "#fff", marginBottom: "1.2rem" }}>
+            Hi, I'm{" "}
+            <span style={{ background: "linear-gradient(135deg, #9333ea, #ec4899, #06b6d4)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Vikram</span>
+          </h1>
         </div>
 
-        {/* CTAs */}
-        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", justifyContent: "center" }}>
-          <button onClick={() => scrollTo("work")} style={{ fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", padding: "0.9rem 2.2rem", borderRadius: "6px", color: "#fff", background: "linear-gradient(135deg, #9333ea, #ec4899)", boxShadow: "0 0 30px rgba(147,51,234,0.3)", border: "none", cursor: "pointer" }}>See My Work</button>
-          <button onClick={() => scrollTo("contact")} style={{ fontSize: "0.7rem", letterSpacing: "2px", textTransform: "uppercase", padding: "0.9rem 2.2rem", borderRadius: "6px", color: "rgba(241,245,249,0.6)", border: "1px solid rgba(255,255,255,0.1)", background: "transparent", cursor: "pointer" }}>Contact Me</button>
+        <div data-id="h3" style={{ ...fade("h3", 0.2) }}>
+          <p style={{ fontSize: "clamp(1rem, 2.5vw, 1.3rem)", color: "rgba(232,234,240,0.45)", marginBottom: "1.5rem" }}>
+            AI / ML Engineer &nbsp;·&nbsp; Building Intelligent Systems
+          </p>
         </div>
 
-        {/* Scroll arrow */}
-        <div style={{ position: "absolute", bottom: "2rem", left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", color: "rgba(241,245,249,0.2)", fontSize: "0.6rem", letterSpacing: "2px" }}>
-          <span>SCROLL</span>
-          <div style={{ width: 1, height: 40, background: "linear-gradient(180deg, rgba(147,51,234,0.6), transparent)" }} />
+        <div data-id="h4" style={{ ...fade("h4", 0.3) }}>
+          <p style={{ maxWidth: 500, fontSize: "1rem", color: "rgba(232,234,240,0.38)", lineHeight: 1.8, marginBottom: "2.8rem" }}>
+            I transform raw data into intelligent systems. Passionate about machine learning, deep neural networks, and building products that actually work.
+          </p>
         </div>
-      </section>
 
-      {/* ABOUT STATS */}
-      <section style={{ position: "relative", zIndex: 1, padding: "5rem 2rem", display: "flex", justifyContent: "center" }}>
-        <div data-id="stats" style={{ maxWidth: 900, width: "100%", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem", ...fadeUp("stats") }}>
-          {[["10+", "ML Projects built"], ["5+", "Frameworks used"], ["3+", "AI Domains"], ["∞", "Curiosity level"]].map(([num, label]) => (
-            <div key={label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "2rem 1.5rem", textAlign: "center" }}>
-              <div style={{ fontSize: "2.5rem", fontWeight: 900, background: "linear-gradient(135deg, #9333ea, #ec4899)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{num}</div>
-              <div style={{ fontSize: "0.65rem", letterSpacing: "2px", textTransform: "uppercase", color: "rgba(241,245,249,0.35)", marginTop: "0.5rem" }}>{label}</div>
+        <div data-id="h5" style={{ display: "flex", gap: "0.8rem", flexWrap: "wrap", justifyContent: "center", marginBottom: "5rem", ...fade("h5", 0.4) }}>
+          <button onClick={() => scrollTo("work")} style={{ fontSize: "0.88rem", fontWeight: 600, color: "#fff", background: "linear-gradient(135deg, #9333ea, #7c3aed)", border: "none", padding: "0.85rem 2.2rem", borderRadius: "10px", cursor: "pointer", boxShadow: "0 8px 30px rgba(147,51,234,0.3)" }}>
+            View Projects →
+          </button>
+          <button onClick={() => scrollTo("contact")} style={{ fontSize: "0.88rem", fontWeight: 500, color: "rgba(232,234,240,0.65)", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", padding: "0.85rem 2.2rem", borderRadius: "10px", cursor: "pointer" }}>
+            Contact Me
+          </button>
+        </div>
+
+        <div data-id="h6" style={{ display: "flex", gap: "4rem", flexWrap: "wrap", justifyContent: "center", paddingTop: "2.5rem", borderTop: "1px solid rgba(255,255,255,0.06)", ...fade("h6", 0.5) }}>
+          {[["10+","Projects"],["5+","Frameworks"],["3+","AI Domains"]].map(([n,l]) => (
+            <div key={l} style={{ textAlign: "center" }}>
+              <div style={{ fontSize: "2rem", fontWeight: 800, color: "#fff" }}>{n}</div>
+              <div style={{ fontSize: "0.68rem", color: "rgba(232,234,240,0.3)", letterSpacing: "1.5px", textTransform: "uppercase", marginTop: "0.3rem" }}>{l}</div>
             </div>
           ))}
         </div>
       </section>
+
+      <div style={{ height: 1, background: "rgba(255,255,255,0.05)", maxWidth: 880, margin: "0 auto" }} />
+
+      {/* ABOUT */}
+      <section id="about" style={{ position: "relative", zIndex: 1, padding: "6rem 2rem", display: "flex", justifyContent: "center" }}>
+        <div style={{ maxWidth: 880, width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center" }}>
+          <div data-id="ab1" style={{ ...fade("ab1") }}>
+            <div style={{ fontSize: "0.65rem", letterSpacing: "3px", textTransform: "uppercase", color: "#9333ea", marginBottom: "0.8rem", fontWeight: 600 }}>About Me</div>
+            <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.4rem)", fontWeight: 800, letterSpacing: "-1px", color: "#fff", marginBottom: "1.5rem", lineHeight: 1.1 }}>
+              Turning Data into<br />
+              <span style={{ background: "linear-gradient(135deg,#9333ea,#ec4899)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Intelligence</span>
+            </h2>
+            <p style={{ color: "rgba(232,234,240,0.48)", lineHeight: 1.9, fontSize: "0.93rem", marginBottom: "1rem" }}>
+              Hey! I'm Vikram Thakur — a passionate CS student deeply focused on AI and Machine Learning. I believe in learning by building real things.
+            </p>
+            <p style={{ color: "rgba(232,234,240,0.48)", lineHeight: 1.9, fontSize: "0.93rem", marginBottom: "1.5rem" }}>
+              From predicting insurance costs to detecting emotions in real-time — every project teaches me something new about the power of data and algorithms.
+            </p>
+            <div style={{ padding: "1rem 1.2rem", borderLeft: "2px solid #7c3aed", background: "rgba(124,58,237,0.06)", borderRadius: "0 8px 8px 0", fontSize: "0.88rem", fontStyle: "italic", color: "rgba(232,234,240,0.4)" }}>
+              "The goal isn't just to code — it's to build things that matter."
+            </div>
+          </div>
+
+          <div data-id="ab2" style={{ ...fade("ab2", 0.15) }}>
+            <div style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "16px", overflow: "hidden" }}>
+              <div style={{ padding: "1.4rem 1.5rem", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: "0.9rem" }}>
+                <div style={{ width: 48, height: 48, borderRadius: "12px", background: "linear-gradient(135deg,#9333ea,#ec4899)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.4rem", flexShrink: 0 }}>👨‍💻</div>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: "0.95rem", color: "#fff" }}>Vikram Thakur</div>
+                  <div style={{ fontSize: "0.75rem", color: "rgba(232,234,240,0.38)", marginTop: "0.2rem" }}>AI / ML Engineer</div>
+                </div>
+              </div>
+              {[["📧","vt594925@gmail.com"],["🐙","github.com/vikram-101"],["💼","linkedin.com/in/vikram-thakur"],["📍","India"]].map(([icon,text]) => (
+                <div key={text} style={{ display: "flex", alignItems: "center", gap: "0.9rem", padding: "0.85rem 1.5rem", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                  <span style={{ fontSize: "0.95rem", opacity: 0.6 }}>{icon}</span>
+                  <span style={{ fontSize: "0.78rem", color: "rgba(232,234,240,0.42)" }}>{text}</span>
+                </div>
+              ))}
+              <div style={{ padding: "1rem 1.5rem", display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                {["AI/ML","Python","Open to Work"].map(t => (
+                  <span key={t} style={{ fontSize: "0.62rem", padding: "0.22rem 0.7rem", borderRadius: "100px", background: "rgba(147,51,234,0.12)", border: "1px solid rgba(147,51,234,0.22)", color: "#c084fc" }}>{t}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div style={{ height: 1, background: "rgba(255,255,255,0.05)", maxWidth: 880, margin: "0 auto" }} />
 
       {/* SKILLS */}
-      <section id="skills" style={{ position: "relative", zIndex: 1, padding: "5rem 2rem", display: "flex", justifyContent: "center" }}>
-        <div style={{ maxWidth: 1000, width: "100%" }}>
-          <div data-id="skills-head" style={{ marginBottom: "3rem", ...fadeUp("skills-head") }}>
-            <div style={{ fontSize: "0.65rem", letterSpacing: "4px", textTransform: "uppercase", color: "#9333ea", marginBottom: "0.8rem" }}>{/* Skills */}</div>
-            <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", fontWeight: 900, letterSpacing: "-1px" }}>
-              My <span style={{ background: "linear-gradient(90deg,#9333ea,#ec4899)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Toolkit</span>
-            </h2>
+      <section id="skills" style={{ position: "relative", zIndex: 1, padding: "6rem 2rem", display: "flex", justifyContent: "center" }}>
+        <div style={{ maxWidth: 880, width: "100%" }}>
+          <div data-id="sk0" style={{ marginBottom: "2.5rem", ...fade("sk0") }}>
+            <div style={{ fontSize: "0.65rem", letterSpacing: "3px", textTransform: "uppercase", color: "#9333ea", marginBottom: "0.7rem", fontWeight: 600 }}>Skills</div>
+            <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.4rem)", fontWeight: 800, letterSpacing: "-1px", color: "#fff" }}>My Toolkit</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(255px, 1fr))", gap: "0.9rem" }}>
             {skills.map((sk, i) => (
-              <div key={sk.name} data-id={`sk-${i}`} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1.8rem", cursor: "default", transition: "border-color 0.3s, transform 0.3s", ...fadeUp(`sk-${i}`, i * 0.08) }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = `${sk.color}55`; e.currentTarget.style.transform = "translateY(-4px)"; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                <div style={{ width: 42, height: 42, borderRadius: 10, background: `${sk.color}20`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.3rem", marginBottom: "1rem" }}>{sk.icon}</div>
-                <div style={{ fontWeight: 700, fontSize: "0.9rem", letterSpacing: "0.5px", marginBottom: "0.5rem", color: "#f1f5f9" }}>{sk.name}</div>
-                <div style={{ fontSize: "0.8rem", color: "rgba(241,245,249,0.45)", lineHeight: 1.7, marginBottom: "1rem" }}>{sk.desc}</div>
-                <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+              <div key={sk.name} data-id={`sk${i+1}`} style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "14px", padding: "1.4rem", transition: "border-color 0.2s, transform 0.2s", cursor: "default", ...fade(`sk${i+1}`, i*0.07) }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor=`${sk.color}45`; e.currentTarget.style.transform="translateY(-3px)"; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor="rgba(255,255,255,0.07)"; e.currentTarget.style.transform="translateY(0)"; }}>
+                <div style={{ width: 36, height: 36, borderRadius: "9px", background: `${sk.color}18`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", marginBottom: "0.9rem" }}>{sk.icon}</div>
+                <div style={{ fontWeight: 700, fontSize: "0.88rem", color: "#fff", marginBottom: "0.45rem" }}>{sk.name}</div>
+                <div style={{ fontSize: "0.78rem", color: "rgba(232,234,240,0.38)", lineHeight: 1.7, marginBottom: "0.9rem" }}>{sk.desc}</div>
+                <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
                   {sk.tags.map(t => (
-                    <span key={t} style={{ fontSize: "0.58rem", letterSpacing: "1px", textTransform: "uppercase", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(241,245,249,0.4)" }}>{t}</span>
+                    <span key={t} style={{ fontSize: "0.58rem", padding: "0.18rem 0.55rem", borderRadius: "6px", background: `${sk.color}12`, border: `1px solid ${sk.color}22`, color: sk.color }}>{t}</span>
                   ))}
                 </div>
               </div>
@@ -151,71 +192,69 @@ export default function Portfolio() {
           </div>
         </div>
       </section>
+
+      <div style={{ height: 1, background: "rgba(255,255,255,0.05)", maxWidth: 880, margin: "0 auto" }} />
 
       {/* PROJECTS */}
-      <section id="work" style={{ position: "relative", zIndex: 1, padding: "5rem 2rem", display: "flex", justifyContent: "center", background: "rgba(147,51,234,0.02)" }}>
-        <div style={{ maxWidth: 900, width: "100%" }}>
-          <div data-id="proj-head" style={{ marginBottom: "3rem", ...fadeUp("proj-head") }}>
-            <div style={{ fontSize: "0.65rem", letterSpacing: "4px", textTransform: "uppercase", color: "#9333ea", marginBottom: "0.8rem" }}>{/* Work */}</div>
-            <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", fontWeight: 900, letterSpacing: "-1px" }}>
-              Things I've <span style={{ background: "linear-gradient(90deg,#06b6d4,#9333ea)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Shipped</span>
-            </h2>
+      <section id="work" style={{ position: "relative", zIndex: 1, padding: "6rem 2rem", display: "flex", justifyContent: "center" }}>
+        <div style={{ maxWidth: 880, width: "100%" }}>
+          <div data-id="pr0" style={{ marginBottom: "2.5rem", ...fade("pr0") }}>
+            <div style={{ fontSize: "0.65rem", letterSpacing: "3px", textTransform: "uppercase", color: "#9333ea", marginBottom: "0.7rem", fontWeight: 600 }}>Work</div>
+            <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.4rem)", fontWeight: 800, letterSpacing: "-1px", color: "#fff" }}>Selected Projects</h2>
           </div>
-
-          {projects.map((p, i) => (
-            <div key={p.num} data-id={`pr-${i}`} style={{ display: "grid", gridTemplateColumns: "50px 1fr 30px", gap: "1.5rem", alignItems: "flex-start", padding: "2rem 0", borderTop: "1px solid rgba(255,255,255,0.06)", cursor: "default", transition: "opacity 0.3s", ...fadeUp(`pr-${i}`, i * 0.1) }}
-              onMouseEnter={e => e.currentTarget.style.opacity = "0.75"}
-              onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-              <span style={{ fontSize: "0.65rem", letterSpacing: "2px", color: "rgba(241,245,249,0.25)", paddingTop: "0.3rem" }}>{p.num}</span>
-              <div>
-                <div style={{ fontWeight: 800, fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)", color: "rgba(241,245,249,0.85)", marginBottom: "0.5rem" }}>{p.name}</div>
-                <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.6rem" }}>
-                  {p.badges.map((b, bi) => (
-                    <span key={b} style={{ fontSize: "0.6rem", letterSpacing: "1px", textTransform: "uppercase", padding: "0.2rem 0.7rem", borderRadius: "4px", background: `${p.colors[bi % 2]}18`, color: p.colors[bi % 2], border: `1px solid ${p.colors[bi % 2]}30` }}>{b}</span>
-                  ))}
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.9rem" }}>
+            {projects.map((p, i) => (
+              <div key={p.num} data-id={`pr${i+1}`} style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", padding: "1.8rem", display: "grid", gridTemplateColumns: "36px 1fr 24px", gap: "1.2rem", alignItems: "flex-start", transition: "border-color 0.2s, transform 0.2s", cursor: "default", ...fade(`pr${i+1}`, i*0.1) }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor="rgba(147,51,234,0.28)"; e.currentTarget.style.transform="translateX(3px)"; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor="rgba(255,255,255,0.07)"; e.currentTarget.style.transform="translateX(0)"; }}>
+                <div style={{ fontSize: "0.65rem", color: "rgba(232,234,240,0.18)", fontWeight: 600, letterSpacing: "1px", paddingTop: "0.2rem" }}>{p.num}</div>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: "1.05rem", color: "#fff", marginBottom: "0.45rem" }}>{p.name}</div>
+                  <div style={{ display: "flex", gap: "0.45rem", flexWrap: "wrap", marginBottom: "0.65rem" }}>
+                    {p.badges.map((b,bi) => (
+                      <span key={b} style={{ fontSize: "0.62rem", padding: "0.18rem 0.65rem", borderRadius: "6px", background: `${p.colors[bi%2]}14`, border: `1px solid ${p.colors[bi%2]}28`, color: p.colors[bi%2], fontWeight: 500 }}>{b}</span>
+                    ))}
+                  </div>
+                  <div style={{ fontSize: "0.82rem", color: "rgba(232,234,240,0.38)", lineHeight: 1.7, marginBottom: "0.9rem" }}>{p.desc}</div>
+                  <div style={{ display: "flex", gap: "0.5rem" }}>
+                    {p.github && <a href={p.github} target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.72rem", fontWeight: 500, color: "rgba(232,234,240,0.48)", textDecoration: "none", padding: "0.3rem 0.85rem", borderRadius: "7px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)" }}>GitHub ↗</a>}
+                    {p.demo && <a href={p.demo} target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.72rem", fontWeight: 600, color: "#c084fc", textDecoration: "none", padding: "0.3rem 0.85rem", borderRadius: "7px", border: "1px solid rgba(147,51,234,0.28)", background: "rgba(147,51,234,0.1)" }}>Live Demo ↗</a>}
+                  </div>
                 </div>
-                <div style={{ fontSize: "0.85rem", color: "rgba(241,245,249,0.4)", lineHeight: 1.7, marginBottom: "0.8rem" }}>{p.desc}</div>
-                <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
-                  {p.github && <a href={p.github} target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.6rem", letterSpacing: "1.5px", textTransform: "uppercase", padding: "0.35rem 0.9rem", borderRadius: "4px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", color: "rgba(241,245,249,0.6)", textDecoration: "none" }}>🐙 GitHub</a>}
-                  {p.demo && <a href={p.demo} target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.6rem", letterSpacing: "1.5px", textTransform: "uppercase", padding: "0.35rem 0.9rem", borderRadius: "4px", background: "rgba(147,51,234,0.15)", border: "1px solid rgba(147,51,234,0.3)", color: "#c084fc", textDecoration: "none" }}>🚀 Live Demo</a>}
-                </div>
+                <div style={{ fontSize: "1rem", color: "rgba(232,234,240,0.12)", paddingTop: "0.2rem" }}>↗</div>
               </div>
-              <span style={{ fontSize: "1.2rem", color: "rgba(241,245,249,0.2)", paddingTop: "0.2rem" }}>↗</span>
-            </div>
-          ))}
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }} />
-        </div>
-      </section>
-
-      {/* CONTACT */}
-      <section id="contact" style={{ position: "relative", zIndex: 1, padding: "6rem 2rem", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-        <div data-id="contact" style={{ maxWidth: 650, ...fadeUp("contact") }}>
-          <div style={{ fontSize: "0.65rem", letterSpacing: "4px", textTransform: "uppercase", color: "#9333ea", marginBottom: "1.5rem" }}>{/* Contact */}</div>
-          <h2 style={{ fontSize: "clamp(2.5rem, 7vw, 5rem)", fontWeight: 900, letterSpacing: "-2px", lineHeight: 0.95, marginBottom: "1.5rem" }}>
-            Let's build<br />
-            <em style={{ fontStyle: "italic", fontWeight: 400, background: "linear-gradient(90deg,#9333ea,#ec4899)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>something great.</em>
-          </h2>
-          <p style={{ color: "rgba(241,245,249,0.4)", fontSize: "0.95rem", lineHeight: 1.8, marginBottom: "3rem" }}>
-            Interesting AI project? Want to collaborate? Just wanna geek out about ML? Hit me up.
-          </p>
-          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", justifyContent: "center" }}>
-            {[{ icon: "✉️", label: "Email", href: "mailto:vt594925@gmail.com" }, { icon: "🐙", label: "GitHub", href: "https://github.com/vikram-101" }, { icon: "💼", label: "LinkedIn", href: "https://www.linkedin.com/in/vikram-thakur-852379376" }, { icon: "🐦", label: "Twitter", href: "#" }].map(c => (
-              <a key={c.label} href={c.href} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", padding: "1.5rem 2rem", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", textDecoration: "none", color: "rgba(241,245,249,0.45)", minWidth: 120, transition: "all 0.3s" }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(147,51,234,0.4)"; e.currentTarget.style.color = "#f1f5f9"; e.currentTarget.style.transform = "translateY(-4px)"; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"; e.currentTarget.style.color = "rgba(241,245,249,0.45)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                <span style={{ fontSize: "1.5rem" }}>{c.icon}</span>
-                <span style={{ fontSize: "0.6rem", letterSpacing: "2px", textTransform: "uppercase" }}>{c.label}</span>
-              </a>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer style={{ position: "relative", zIndex: 1, borderTop: "1px solid rgba(255,255,255,0.06)", padding: "1.5rem 2.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", fontSize: "0.6rem", letterSpacing: "2px", textTransform: "uppercase", color: "rgba(241,245,249,0.2)" }}>
-        <span>© 2024 Vikram</span>
-        <span style={{ color: "#9333ea" }}>AI / ML Engineer</span>
-        <span>Built with 💜</span>
+      <div style={{ height: 1, background: "rgba(255,255,255,0.05)", maxWidth: 880, margin: "0 auto" }} />
+
+      {/* CONTACT */}
+      <section id="contact" style={{ position: "relative", zIndex: 1, padding: "6rem 2rem", display: "flex", justifyContent: "center" }}>
+        <div style={{ maxWidth: 600, width: "100%", textAlign: "center" }}>
+          <div data-id="ct1" style={{ ...fade("ct1") }}>
+            <div style={{ fontSize: "0.65rem", letterSpacing: "3px", textTransform: "uppercase", color: "#9333ea", marginBottom: "1rem", fontWeight: 600 }}>Contact</div>
+            <h2 style={{ fontSize: "clamp(2rem, 5vw, 3.8rem)", fontWeight: 800, letterSpacing: "-2px", color: "#fff", lineHeight: 1.05, marginBottom: "1rem" }}>
+              Let's Work<br />
+              <span style={{ background: "linear-gradient(135deg,#9333ea,#ec4899)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Together</span>
+            </h2>
+            <p style={{ color: "rgba(232,234,240,0.38)", fontSize: "0.92rem", lineHeight: 1.8, marginBottom: "2.5rem" }}>
+              Have an interesting AI project or want to collaborate? My inbox is always open.
+            </p>
+            <a href="mailto:vt594925@gmail.com" style={{ display: "inline-block", fontSize: "0.88rem", fontWeight: 600, color: "#fff", background: "linear-gradient(135deg,#9333ea,#7c3aed)", padding: "0.88rem 2.5rem", borderRadius: "12px", textDecoration: "none", boxShadow: "0 8px 30px rgba(147,51,234,0.28)", marginBottom: "2.5rem" }}>
+              Say Hello ✉️
+            </a>
+            <div style={{ fontSize: "0.75rem", color: "rgba(232,234,240,0.35)", marginTop: "2rem", letterSpacing: "0.5px" }}>
+              or connect with me on<br />
+              <a href="https://github.com/vikram-101" target="_blank" rel="noopener noreferrer" style={{ color: "#9333ea", textDecoration: "none" }}>GitHub</a> • <a href="https://linkedin.com/in/vikram-thakur" target="_blank" rel="noopener noreferrer" style={{ color: "#9333ea", textDecoration: "none" }}>LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer style={{ padding: "3rem 2rem", textAlign: "center", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+        <p style={{ fontSize: "0.75rem", color: "rgba(232,234,240,0.25)" }}>© 2024 Vikram Thakur. All rights reserved.</p>
       </footer>
     </div>
   );
