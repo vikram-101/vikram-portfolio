@@ -172,11 +172,11 @@ export default function Portfolio() {
       {/* RESUME */}
       <section id="resume" style={{ position: "relative", zIndex: 1, padding: "6rem 2rem", display: "flex", justifyContent: "center" }}>
         <div style={{ maxWidth: 880, width: "100%", textAlign: "center" }}>
-          <div data-id="res0" style={{ marginBottom: "2.5rem", ...fade("res0") }}>
+          <div data-id="res0" style={{ marginBottom: "2.5rem" }}>
             <div style={{ fontSize: "0.65rem", letterSpacing: "3px", textTransform: "uppercase", color: "#9333ea", marginBottom: "0.7rem", fontWeight: 600 }}>Resume</div>
             <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.4rem)", fontWeight: 800, letterSpacing: "-1px", color: "#fff" }}>My Experience</h2>
           </div>
-          <div data-id="res1" style={{ ...fade("res1") }}>
+          <div data-id="res1" style={{}}>
             <p style={{ color: "rgba(232,234,240,0.48)", lineHeight: 1.9, fontSize: "0.93rem", marginBottom: "2rem" }}>
               View or download my resume to see my full experience, education, and skills.
             </p>
