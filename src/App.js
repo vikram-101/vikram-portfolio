@@ -50,6 +50,32 @@ export default function Portfolio() {
 
   return (
     <div style={{ background: "#060609", color: "#e8eaf0", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", minHeight: "100vh", overflowX: "hidden" }}>
+      <style>
+        {`
+          @media (max-width: 768px) {
+            nav {
+              padding: 0 1rem !important;
+              height: 50px !important;
+            }
+            nav > div:first-child {
+              font-size: 0.9rem !important;
+            }
+            nav > div:nth-child(2) {
+              display: none !important;
+            }
+            nav > a {
+              font-size: 0.7rem !important;
+              padding: 0.35rem 0.9rem !important;
+            }
+          }
+          @media (max-width: 480px) {
+            nav > a {
+              font-size: 0.65rem !important;
+              padding: 0.3rem 0.7rem !important;
+            }
+          }
+        `}
+      </style>
 
       {/* BG glow */}
       <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}>
@@ -124,44 +150,65 @@ export default function Portfolio() {
       <div style={{ height: 1, background: "rgba(255,255,255,0.05)", maxWidth: 880, margin: "0 auto" }} />
 
       {/* ABOUT */}
-      <section id="about" style={{ position: "relative", zIndex: 1, padding: "6rem 2rem", display: "flex", justifyContent: "center" }}>
-        <div style={{ maxWidth: 880, width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center" }}>
+      <section id="about" style={{ position: "relative", zIndex: 1, padding: "6rem 2rem", display: "flex", justifyContent: "center", background: "linear-gradient(135deg, rgba(6,6,9,0.98) 0%, rgba(10,10,15,0.98) 100%)" }}>
+        <div style={{ maxWidth: 1200, width: "100%", display: "grid", gridTemplateColumns: "2fr 1fr", gap: "5rem", alignItems: "start" }}>
           <div data-id="ab1" style={{ ...fade("ab1") }}>
-            <div style={{ fontSize: "0.65rem", letterSpacing: "3px", textTransform: "uppercase", color: "#9333ea", marginBottom: "0.8rem", fontWeight: 600 }}>About Me</div>
-            <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.4rem)", fontWeight: 800, letterSpacing: "-1px", color: "#fff", marginBottom: "1.5rem", lineHeight: 1.1 }}>
+            <div style={{ fontSize: "0.65rem", letterSpacing: "3px", textTransform: "uppercase", color: "#9333ea", marginBottom: "1rem", fontWeight: 600 }}>About Me</div>
+            <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, letterSpacing: "-1px", color: "#fff", marginBottom: "2rem", lineHeight: 1.1 }}>
               Turning Data into<br />
               <span style={{ background: "linear-gradient(135deg,#9333ea,#ec4899)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Intelligence</span>
             </h2>
-            <p style={{ color: "rgba(232,234,240,0.48)", lineHeight: 1.9, fontSize: "0.93rem", marginBottom: "1rem" }}>
-              Hey! I'm Vikram Thakur — a passionate CS student deeply focused on AI and Machine Learning. I believe in learning by building real things.
-            </p>
-            <p style={{ color: "rgba(232,234,240,0.48)", lineHeight: 1.9, fontSize: "0.93rem", marginBottom: "1.5rem" }}>
-              From predicting insurance costs to detecting emotions in real-time — every project teaches me something new about the power of data and algorithms.
-            </p>
-            <div style={{ padding: "1rem 1.2rem", borderLeft: "2px solid #7c3aed", background: "rgba(124,58,237,0.06)", borderRadius: "0 8px 8px 0", fontSize: "0.88rem", fontStyle: "italic", color: "rgba(232,234,240,0.4)" }}>
-              "The goal isn't just to code — it's to build things that matter."
+            <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "16px", padding: "2rem", marginBottom: "2rem" }}>
+              <p style={{ color: "rgba(232,234,240,0.7)", lineHeight: 1.8, fontSize: "1rem", marginBottom: "1.5rem" }}>
+                I am Vikram Thakur, a dedicated Computer Science student specializing in Artificial Intelligence and Machine Learning. With a strong foundation in data-driven technologies, I focus on developing practical solutions through hands-on projects and continuous learning.
+              </p>
+              <p style={{ color: "rgba(232,234,240,0.7)", lineHeight: 1.8, fontSize: "1rem", marginBottom: "2rem" }}>
+                My expertise spans machine learning algorithms, deep learning architectures, and real-world applications including predictive modeling, computer vision, and natural language processing. I have successfully deployed multiple AI-powered applications, demonstrating proficiency in modern frameworks and deployment strategies.
+              </p>
+            </div>
+            <div style={{ padding: "1.5rem 2rem", borderLeft: "3px solid #7c3aed", background: "linear-gradient(135deg, rgba(124,58,237,0.08), rgba(147,51,234,0.05))", borderRadius: "0 12px 12px 0", fontSize: "0.95rem", fontStyle: "italic", color: "rgba(232,234,240,0.6)", fontWeight: 500 }}>
+              "Innovation through data: Transforming complex problems into intelligent, scalable solutions."
             </div>
           </div>
 
           <div data-id="ab2" style={{ ...fade("ab2", 0.15) }}>
-            <div style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "16px", overflow: "hidden" }}>
-              <div style={{ padding: "1.4rem 1.5rem", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: "0.9rem" }}>
-                <div style={{ width: 48, height: 48, borderRadius: "12px", background: "linear-gradient(135deg,#9333ea,#ec4899)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.4rem", flexShrink: 0 }}>👨‍💻</div>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: "0.95rem", color: "#fff" }}>Vikram Thakur</div>
-                  <div style={{ fontSize: "0.75rem", color: "rgba(232,234,240,0.38)", marginTop: "0.2rem" }}>AI / ML Engineer</div>
-                </div>
+            <div style={{ background: "linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))", border: "1px solid rgba(255,255,255,0.12)", borderRadius: "24px", overflow: "hidden", boxShadow: "0 25px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)" }}>
+              <div style={{ padding: "2.5rem 2.5rem 2rem", textAlign: "center", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                <div style={{ width: 80, height: 80, borderRadius: "50%", background: "linear-gradient(135deg,#9333ea,#ec4899,#06b6d4)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "2.5rem", margin: "0 auto 1.5rem", boxShadow: "0 8px 24px rgba(147,51,234,0.3)" }}>👨‍💻</div>
+                <div style={{ fontWeight: 700, fontSize: "1.3rem", color: "#fff", marginBottom: "0.5rem" }}>Vikram Thakur</div>
+                <div style={{ fontSize: "0.9rem", color: "rgba(232,234,240,0.6)", fontWeight: 500 }}>AI / ML Engineer</div>
+                <div style={{ fontSize: "0.75rem", color: "rgba(232,234,240,0.4)", marginTop: "0.5rem" }}>Computer Science Student</div>
               </div>
-              {[["📧","vt594925@gmail.com"],["🐙","github.com/vikram-101"],["💼","linkedin.com/in/vikram-thakur"],["📍","India"]].map(([icon,text]) => (
-                <div key={text} style={{ display: "flex", alignItems: "center", gap: "0.9rem", padding: "0.85rem 1.5rem", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-                  <span style={{ fontSize: "0.95rem", opacity: 0.6 }}>{icon}</span>
-                  <span style={{ fontSize: "0.78rem", color: "rgba(232,234,240,0.42)" }}>{text}</span>
+              
+              <div style={{ padding: "0" }}>
+                <div style={{ padding: "1.5rem 2.5rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                  <div style={{ fontSize: "0.8rem", fontWeight: 600, color: "#9333ea", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem" }}>Contact</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                    {[
+                      ["📧","vt594925@gmail.com"],
+                      ["🐙","github.com/vikram-101"],
+                      ["💼","linkedin.com/in/vikram-thakur"],
+                      ["📍","India"]
+                    ].map(([icon,text]) => (
+                      <div key={text} style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                        <span style={{ fontSize: "1.2rem", opacity: 0.8 }}>{icon}</span>
+                        <span style={{ fontSize: "0.85rem", color: "rgba(232,234,240,0.7)", fontWeight: 400 }}>{text}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
-              <div style={{ padding: "1rem 1.5rem", display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-                {["AI/ML","Python","Open to Work"].map(t => (
-                  <span key={t} style={{ fontSize: "0.62rem", padding: "0.22rem 0.7rem", borderRadius: "100px", background: "rgba(147,51,234,0.12)", border: "1px solid rgba(147,51,234,0.22)", color: "#c084fc" }}>{t}</span>
-                ))}
+                
+                <div style={{ padding: "1.5rem 2.5rem" }}>
+                  <div style={{ fontSize: "0.8rem", fontWeight: 600, color: "#9333ea", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem" }}>Expertise</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
+                    {["Machine Learning","Deep Learning","Computer Vision","NLP","Python","Data Science","MLOps"].map(skill => (
+                      <div key={skill} style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}>
+                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: "linear-gradient(135deg,#9333ea,#ec4899)" }}></div>
+                        <span style={{ fontSize: "0.8rem", color: "rgba(232,234,240,0.7)", fontWeight: 400 }}>{skill}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
