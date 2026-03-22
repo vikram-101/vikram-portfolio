@@ -245,3 +245,9 @@ export default function Portfolio() {
             <a href="mailto:vt594925@gmail.com" style={{ display: "inline-block", fontSize: "0.88rem", fontWeight: 600, color: "#fff", background: "linear-gradient(135deg,#9333ea,#7c3aed)", padding: "0.88rem 2.5rem", borderRadius: "12px", textDecoration: "none", boxShadow: "0 8px 30px rgba(147,51,234,0.28)", marginBottom: "2.5rem" }}>
               Say Hello
             </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
