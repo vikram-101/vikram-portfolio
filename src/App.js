@@ -74,6 +74,18 @@ export default function Portfolio() {
               padding: 0.3rem 0.7rem !important;
             }
           }
+          @media (max-width: 1024px) {
+            #about > div {
+              grid-template-columns: 1fr !important;
+              gap: 3rem !important;
+            }
+            #about > div > div:first-child {
+              text-align: center !important;
+            }
+            #about > div > div:first-child h2 {
+              font-size: 2rem !important;
+            }
+          }
         `}
       </style>
 
