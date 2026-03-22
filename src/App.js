@@ -13,6 +13,8 @@ const projects = [
   { num: "01", name: "Insurance Cost Predictor", badges: ["Machine Learning", "Streamlit"], desc: "ML-powered web app that predicts insurance charges based on age, BMI, smoking habits & region. Built with Scikit-learn & deployed on Render.", colors: ["#9333ea", "#ec4899"], github: "https://github.com/vikram-101/insurance-predictor", demo: "https://insurance-predictor-2-omxp.onrender.com/" },
   { num: "02", name: "Emotion Detector", badges: ["Computer Vision", "Deep Learning"], desc: "Real-time facial emotion recognition using CNN trained on FER-2013. Detects 7 emotions live via webcam with 85%+ accuracy.", colors: ["#06b6d4", "#9333ea"], github: "", demo: "" },
   { num: "03", name: "Sentiment Analyzer", badges: ["NLP", "BERT"], desc: "Fine-tuned BERT on 50K tweets to classify sentiment. Clean Streamlit dashboard for live inference.", colors: ["#10b981", "#06b6d4"], github: "", demo: "" },
+  { num: "04", name: "Chatbot for Customer Support", badges: ["NLP", "Streamlit"], desc: "AI-powered chatbot using BERT for intent recognition and response generation. Deployed on Streamlit for real-time interactions.", colors: ["#10b981", "#06b6d4"], github: "", demo: "" },
+  { num: "05", name: "Image Classification App", badges: ["Computer Vision", "Flask"], desc: "Web app for classifying images using pre-trained CNN models. Built with Flask and deployed on Heroku.", colors: ["#f59e0b", "#ec4899"], github: "", demo: "" },
 ];
 
 export default function Portfolio() {
@@ -60,7 +62,7 @@ export default function Portfolio() {
           Vikram<span style={{ color: "#9333ea" }}>.</span>
         </div>
         <div style={{ display: "flex", gap: "0.2rem" }}>
-          {[["About","about"],["Skills","skills"],["Work","work"],["Contact","contact"]].map(([l,id]) => (
+          {[["About","about"],["Resume","resume"],["Skills","skills"],["Work","work"],["Contact","contact"]].map(([l,id]) => (
             <button key={id} onClick={() => scrollTo(id)} style={{ fontSize: "0.8rem", fontWeight: 500, color: activeNav === id ? "#fff" : "rgba(232,234,240,0.4)", background: "transparent", border: "none", padding: "0.45rem 0.9rem", borderRadius: "7px", cursor: "pointer", transition: "color 0.2s" }}
               onMouseEnter={e => e.target.style.color="#fff"}
               onMouseLeave={e => e.target.style.color = activeNav===id ? "#fff" : "rgba(232,234,240,0.4)"}>
@@ -160,6 +162,31 @@ export default function Portfolio() {
                   <span key={t} style={{ fontSize: "0.62rem", padding: "0.22rem 0.7rem", borderRadius: "100px", background: "rgba(147,51,234,0.12)", border: "1px solid rgba(147,51,234,0.22)", color: "#c084fc" }}>{t}</span>
                 ))}
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div style={{ height: 1, background: "rgba(255,255,255,0.05)", maxWidth: 880, margin: "0 auto" }} />
+
+      {/* RESUME */}
+      <section id="resume" style={{ position: "relative", zIndex: 1, padding: "6rem 2rem", display: "flex", justifyContent: "center" }}>
+        <div style={{ maxWidth: 880, width: "100%", textAlign: "center" }}>
+          <div data-id="res0" style={{ marginBottom: "2.5rem", ...fade("res0") }}>
+            <div style={{ fontSize: "0.65rem", letterSpacing: "3px", textTransform: "uppercase", color: "#9333ea", marginBottom: "0.7rem", fontWeight: 600 }}>Resume</div>
+            <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.4rem)", fontWeight: 800, letterSpacing: "-1px", color: "#fff" }}>My Experience</h2>
+          </div>
+          <div data-id="res1" style={{ ...fade("res1") }}>
+            <p style={{ color: "rgba(232,234,240,0.48)", lineHeight: 1.9, fontSize: "0.93rem", marginBottom: "2rem" }}>
+              View or download my resume to see my full experience, education, and skills.
+            </p>
+            <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+              <a href="/Vikram_Thakur_Resume.pdf" target="_blank" rel="noopener noreferrer" style={{ display: "inline-block", fontSize: "0.88rem", fontWeight: 600, color: "#fff", background: "linear-gradient(135deg,#9333ea,#7c3aed)", padding: "0.88rem 2.5rem", borderRadius: "12px", textDecoration: "none", boxShadow: "0 8px 30px rgba(147,51,234,0.28)" }}>
+                View Resume
+              </a>
+              <a href="/Vikram_Thakur_Resume.pdf" download style={{ display: "inline-block", fontSize: "0.88rem", fontWeight: 600, color: "#fff", background: "linear-gradient(135deg,#06b6d4,#10b981)", padding: "0.88rem 2.5rem", borderRadius: "12px", textDecoration: "none", boxShadow: "0 8px 30px rgba(6,182,212,0.28)" }}>
+                Download Resume
+              </a>
             </div>
           </div>
         </div>
