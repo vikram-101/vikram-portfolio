@@ -15,7 +15,7 @@ const projects = [
   { num: "03", name: "Sentiment Analyzer", badges: ["NLP", "BERT"], desc: "Fine-tuned BERT on 50K tweets to classify sentiment. Clean Streamlit dashboard for live inference.", colors: ["#10b981", "#06b6d4"], github: "", demo: "" },
   { num: "04", name: "Chatbot for Customer Support", badges: ["NLP", "Streamlit"], desc: "AI-powered chatbot using BERT for intent recognition and response generation. Deployed on Streamlit for real-time interactions.", colors: ["#10b981", "#06b6d4"], github: "", demo: "" },
   { num: "05", name: "Image Classification App", badges: ["Computer Vision", "Flask"], desc: "Web app for classifying images using pre-trained CNN models. Built with Flask and deployed on Heroku.", colors: ["#f59e0b", "#ec4899"], github: "", demo: "" },
-  { num: "06", name: "Spam Detection Flask App", badges: ["NLP", "Flask"], desc: "AI-powered spam detection web app built with Flask. Classifies messages as spam or ham using machine learning models.", colors: ["#06b6d4", "#10b981"], github: "", demo: "https://spam-flask-app-3.onrender.com" },
+  { num: "06", name: "Spam Message Detector", badges: ["NLP", "Flask"], desc: "AI-powered spam detection web app built with Flask. Classifies messages as spam or ham using machine learning models.", colors: ["#06b6d4", "#10b981"], github: "", demo: "https://spam-flask-app-3.onrender.com" },
 ];
 
 export default function Portfolio() {
