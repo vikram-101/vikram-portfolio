@@ -85,6 +85,10 @@ export default function Portfolio() {
             #about > div > div:first-child h2 {
               font-size: 2rem !important;
             }
+            [data-id] {
+              opacity: 1 !important;
+              transform: translateY(0px) !important;
+            }
           }
         `}
       </style>
