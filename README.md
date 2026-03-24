@@ -71,3 +71,31 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ## 🌐 Live Demo
 [Click here to view portfolio](https://vikram-portfolio-teal.vercel.app/)
+
+## Secure Chatbot Setup
+
+The chatbot now uses a server-side `/api/chat` route instead of exposing the OpenRouter API key in the browser.
+
+### Environment variables
+
+Create `.env` from `.env.example` and set:
+
+```env
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENROUTER_MODEL=stepfun/step-3.5-flash:free
+```
+
+### Local development
+
+`npm start` only runs the CRA frontend.  
+For the secure `/api/chat` route locally, run the project with `vercel dev` so both the React app and the `api/` functions are available together.
+
+### Vercel deployment
+
+1. Add `OPENROUTER_API_KEY` in the Vercel project environment variables.
+2. Redeploy the project.
+3. The frontend will call `/api/chat`, and Vercel will run `api/chat.js` on the server.
+
+### Security note
+
+If the OpenRouter key was ever committed or deployed in frontend code, rotate it in OpenRouter and replace it with a fresh key in your environment variables.
