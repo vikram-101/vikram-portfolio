@@ -43,6 +43,22 @@ function setJsonHeaders(res, statusCode = 200) {
   res.setHeader("Content-Type", "application/json");
 }
 
+function parseRequestBody(body) {
+  if (!body) {
+    return {};
+  }
+
+  if (typeof body === "string") {
+    try {
+      return JSON.parse(body);
+    } catch {
+      return {};
+    }
+  }
+
+  return body;
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -67,7 +83,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { messages } = req.body || {};
+    const { messages } = parseRequestBody(req.body);
 
     if (!Array.isArray(messages) || messages.length === 0) {
       setJsonHeaders(res, 400);

@@ -84,7 +84,10 @@ export default function ChatAssistant({ onClose }) {
         ...prev,
         {
           sender: "bot",
-          text: "The assistant is temporarily unavailable. Please try again in a moment.",
+          text:
+            error instanceof Error
+              ? `Chat error: ${error.message}`
+              : "The assistant is temporarily unavailable. Please try again in a moment.",
         },
       ]);
     }
