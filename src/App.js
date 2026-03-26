@@ -255,26 +255,23 @@ export default function App() {
     setFormState("Sending your message...");
 
     try {
-      const response = await fetch("https://formsubmit.co/ajax/vt594925@gmail.com", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
         },
         body: JSON.stringify({
           name: name.trim(),
           email: email.trim(),
-          message: `Project Type: ${projectType.trim() || "Not specified"}\n\n${message.trim()}`,
-          _subject: `Portfolio enquiry from ${name.trim()}${projectType ? ` - ${projectType.trim()}` : ""}`,
-          _captcha: "false",
-          _template: "table",
+          projectType: projectType.trim(),
+          message: message.trim(),
         }),
       });
 
       const result = await response.json().catch(() => null);
 
-      if (!response.ok || result?.success === "false") {
-        throw new Error(result?.message || "Unable to send message right now.");
+      if (!response.ok || !result?.success) {
+        throw new Error(result?.error || "Unable to send message right now.");
       }
 
       setFormState("Message sent successfully. Vikram will receive it directly by email.");
