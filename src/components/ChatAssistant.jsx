@@ -43,6 +43,7 @@ export default function ChatAssistant({ onClose }) {
   const chatEndRef = useRef(null);
   const textareaRef = useRef(null);
   const recognitionRef = useRef(null);
+  const speechLangRef = useRef("en-IN");
   const listenBaseInputRef = useRef("");
   const transcriptRef = useRef("");
   const latestInputRef = useRef("");
@@ -68,6 +69,7 @@ export default function ChatAssistant({ onClose }) {
       return undefined;
     }
 
+    speechLangRef.current = window.navigator?.language || "en-IN";
     setIsTtsSupported(Boolean(window.speechSynthesis && window.SpeechSynthesisUtterance));
     return () => {
       window.speechSynthesis?.cancel();
@@ -87,7 +89,16 @@ export default function ChatAssistant({ onClose }) {
     try {
       window.speechSynthesis.cancel();
       const utterance = new window.SpeechSynthesisUtterance(cleanedText);
-      utterance.lang = "en-IN";
+      const voices = window.speechSynthesis.getVoices?.() || [];
+      const preferredVoice =
+        voices.find((voice) => voice.lang === speechLangRef.current) ||
+        voices.find((voice) => voice.lang?.startsWith("en")) ||
+        voices.find((voice) => voice.lang?.startsWith("hi")) ||
+        null;
+      utterance.lang = preferredVoice?.lang || speechLangRef.current;
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      }
       utterance.rate = 1;
       utterance.pitch = 1;
       utterance.onstart = () => setTtsError("");
@@ -113,7 +124,7 @@ export default function ChatAssistant({ onClose }) {
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
-    recognition.lang = "en-IN";
+    recognition.lang = speechLangRef.current;
 
     recognition.onstart = () => {
       setIsListening(true);
@@ -361,7 +372,7 @@ export default function ChatAssistant({ onClose }) {
               onClick={toggleVoiceInput}
               className={`chat-mic ${isListening ? "chat-mic--active" : ""}`}
               aria-label={isListening ? "Stop voice input" : "Start voice input"}
-              title={isSpeechSupported ? "Use microphone" : "Mic permission only (speech-to-text unsupported)"}
+              title={isSpeechSupported ? "Use microphone" : "Mic permission only. Speech-to-text works best in Chrome or Edge."}
             >
               {isListening ? "Stop Mic" : isSpeechSupported ? "Mic" : "Enable Mic"}
             </button>
@@ -400,6 +411,7 @@ export default function ChatAssistant({ onClose }) {
             Press Enter to send. Use Shift + Enter for a new line.
             {isListening ? " Listening... speak now." : ""}
             {isTtsEnabled ? " Assistant voice is on." : ""}
+            {!isSpeechSupported ? " Live speech-to-text depends on browser support." : ""}
           </p>
           {micError ? <p className="chat-input-error">{micError}</p> : null}
           {ttsError ? <p className="chat-input-error">{ttsError}</p> : null}

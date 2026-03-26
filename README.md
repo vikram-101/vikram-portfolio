@@ -1,101 +1,62 @@
-# Getting Started with Create React App
+# Vikram Portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Portfolio website for Vikram Thakur with a built-in AI assistant and browser voice controls.
 
-## Available Scripts
+## Live Demo
+
+https://vikram-portfolio-teal.vercel.app/
+
+## Scripts
 
 In the project directory, you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Runs only the React frontend on `http://localhost:3000`.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### `npm run dev`
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Runs the React frontend plus Vercel serverless functions together. Use this when testing the chatbot locally because `/api/chat` is served from the `api/` folder.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the production app.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### `npm test`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Runs the test suite.
 
-### `npm run eject`
+## Chatbot Setup
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+The assistant uses a secure server-side `/api/chat` route and sends requests to OpenRouter.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-## 🌐 Live Demo
-[Click here to view portfolio](https://vikram-portfolio-teal.vercel.app/)
-
-## Secure Chatbot Setup
-
-The chatbot now uses a server-side `/api/chat` route instead of exposing the OpenRouter API key in the browser.
-
-### Environment variables
-
-Create `.env` from `.env.example` and set:
+1. Create `.env` from `.env.example`.
+2. Set your OpenRouter key.
+3. Optionally change the model.
 
 ```env
 OPENROUTER_API_KEY=your_openrouter_api_key_here
 OPENROUTER_MODEL=stepfun/step-3.5-flash:free
 ```
 
-### Local development
+## Important Local Note
 
-`npm start` only runs the CRA frontend.  
-For the secure `/api/chat` route locally, run the project with `vercel dev` so both the React app and the `api/` functions are available together.
+If you run only `npm start`, the chat API will not exist and the assistant will fail.  
+Use `npm run dev` for local chat testing.
 
-### Vercel deployment
+## Voice Features
 
-1. Add `OPENROUTER_API_KEY` in the Vercel project environment variables.
-2. Redeploy the project.
-3. The frontend will call `/api/chat`, and Vercel will run `api/chat.js` on the server.
+- Microphone input uses the browser Speech Recognition API.
+- Voice output uses the browser Speech Synthesis API.
+- Best support is usually in Chrome or Edge.
+- On unsupported browsers, mic permission may work but live speech-to-text may still not work.
 
-### Security note
+## Deploying on Vercel
 
-If the OpenRouter key was ever committed or deployed in frontend code, rotate it in OpenRouter and replace it with a fresh key in your environment variables.
+1. Add `OPENROUTER_API_KEY` in the Vercel project settings.
+2. Optionally set `OPENROUTER_MODEL` to another OpenRouter model if needed.
+3. Redeploy.
+
+## Security
+
+Keep API keys only in server environment variables and never in frontend code. If a real key was exposed earlier, rotate it.
