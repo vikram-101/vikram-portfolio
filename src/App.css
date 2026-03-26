@@ -799,6 +799,56 @@ button {
   cursor: pointer;
 }
 
+.chat-mic {
+  border: 1px solid rgba(125, 211, 252, 0.35);
+  border-radius: 14px;
+  min-width: 90px;
+  min-height: 44px;
+  padding: 0.8rem 1rem;
+  background: rgba(56, 189, 248, 0.12);
+  color: #c8f4ff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.chat-mic:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: rgba(125, 211, 252, 0.58);
+}
+
+.chat-mic--active {
+  background: rgba(249, 115, 22, 0.2);
+  border-color: rgba(249, 115, 22, 0.65);
+}
+
+.chat-mic:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chat-tts {
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  border-radius: 14px;
+  min-width: 96px;
+  min-height: 44px;
+  padding: 0.8rem 1rem;
+  background: rgba(16, 185, 129, 0.12);
+  color: #d1fae5;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.chat-tts:hover {
+  background: rgba(16, 185, 129, 0.22);
+  border-color: rgba(52, 211, 153, 0.58);
+}
+
+.chat-tts--active {
+  border-color: rgba(74, 222, 128, 0.72);
+}
+
 .chat-send:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -808,6 +858,13 @@ button {
   margin: 0.65rem 0 0;
   text-align: center;
   color: var(--muted-soft);
+  font-size: 0.78rem;
+}
+
+.chat-input-error {
+  margin: 0.45rem 0 0;
+  text-align: center;
+  color: #fca5a5;
   font-size: 0.78rem;
 }
 
@@ -1043,6 +1100,14 @@ button {
   }
 
   .chat-send {
+    width: 100%;
+  }
+
+  .chat-mic {
+    width: 100%;
+  }
+
+  .chat-tts {
     width: 100%;
   }
 }

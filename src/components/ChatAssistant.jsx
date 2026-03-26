@@ -33,13 +33,177 @@ export default function ChatAssistant({ onClose }) {
   const [chatInput, setChatInput] = useState("");
   const [chatMessages, setChatMessages] = useState(INITIAL_CHAT);
   const [isTyping, setIsTyping] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [micError, setMicError] = useState("");
+  const [isSpeechSupported, setIsSpeechSupported] = useState(false);
+  const [isTtsSupported, setIsTtsSupported] = useState(false);
+  const [isTtsEnabled, setIsTtsEnabled] = useState(true);
+  const [ttsError, setTtsError] = useState("");
   const [history, setHistory] = useState([]);
   const chatEndRef = useRef(null);
   const textareaRef = useRef(null);
+  const recognitionRef = useRef(null);
+  const listenBaseInputRef = useRef("");
+  const transcriptRef = useRef("");
+  const latestInputRef = useRef("");
+
+  const resizeTextarea = () => {
+    if (!textareaRef.current) {
+      return;
+    }
+    textareaRef.current.style.height = "auto";
+    textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 120)}px`;
+  };
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages, isTyping]);
+
+  useEffect(() => {
+    latestInputRef.current = chatInput;
+  }, [chatInput]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    setIsTtsSupported(Boolean(window.speechSynthesis && window.SpeechSynthesisUtterance));
+    return () => {
+      window.speechSynthesis?.cancel();
+    };
+  }, []);
+
+  const speakReply = (text) => {
+    if (!isTtsEnabled || !isTtsSupported || typeof window === "undefined") {
+      return;
+    }
+
+    const cleanedText = text.replace(/[*`#_]/g, "").replace(/\s+/g, " ").trim();
+    if (!cleanedText) {
+      return;
+    }
+
+    try {
+      window.speechSynthesis.cancel();
+      const utterance = new window.SpeechSynthesisUtterance(cleanedText);
+      utterance.lang = "en-IN";
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      utterance.onstart = () => setTtsError("");
+      utterance.onerror = () => setTtsError("Voice output failed. Try Chrome/Edge.");
+      window.speechSynthesis.speak(utterance);
+    } catch {
+      setTtsError("Voice output is not available in this browser.");
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      setIsSpeechSupported(false);
+      return undefined;
+    }
+
+    setIsSpeechSupported(true);
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-IN";
+
+    recognition.onstart = () => {
+      setIsListening(true);
+      setMicError("");
+      listenBaseInputRef.current = latestInputRef.current.trim();
+      transcriptRef.current = "";
+    };
+
+    recognition.onresult = (event) => {
+      let fullTranscript = "";
+      for (let i = 0; i < event.results.length; i += 1) {
+        fullTranscript += event.results[i][0].transcript;
+      }
+
+      transcriptRef.current = fullTranscript.trim();
+      const mergedInput = [listenBaseInputRef.current, transcriptRef.current].filter(Boolean).join(" ").trim();
+      setChatInput(mergedInput);
+      requestAnimationFrame(resizeTextarea);
+    };
+
+    recognition.onerror = (event) => {
+      const messageMap = {
+        "not-allowed": "Microphone permission denied. Allow mic access in browser settings.",
+        "service-not-allowed": "Speech service is blocked by the browser.",
+        "audio-capture": "No microphone detected. Check your audio input device.",
+        network: "Speech recognition network error. Please try again.",
+      };
+      setMicError(messageMap[event.error] || "Unable to capture voice. Please try again.");
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current = recognition;
+
+    return () => {
+      recognition.onstart = null;
+      recognition.onresult = null;
+      recognition.onerror = null;
+      recognition.onend = null;
+      recognition.stop();
+      recognitionRef.current = null;
+    };
+  }, []);
+
+  const requestMicrophonePermission = async () => {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setMicError("This browser does not support microphone permissions.");
+      return false;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach((track) => track.stop());
+      return true;
+    } catch {
+      setMicError("Mic access blocked. Please allow microphone access and try again.");
+      return false;
+    }
+  };
+
+  const toggleVoiceInput = async () => {
+    const recognition = recognitionRef.current;
+    if (!recognition) {
+      const permissionGranted = await requestMicrophonePermission();
+      if (!permissionGranted) {
+        return;
+      }
+      setMicError("Mic access granted, but live speech-to-text works in Chrome/Edge.");
+      return;
+    }
+
+    if (isListening) {
+      recognition.stop();
+      return;
+    }
+
+    setMicError("");
+    const permissionGranted = await requestMicrophonePermission();
+    if (!permissionGranted) {
+      return;
+    }
+
+    try {
+      recognition.start();
+    } catch {
+      setMicError("Mic is already active. Please wait and try again.");
+    }
+  };
 
   const sendMessage = async (message) => {
     const text = (message || chatInput).trim();
@@ -48,9 +212,7 @@ export default function ChatAssistant({ onClose }) {
     }
 
     setChatInput("");
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-    }
+    resizeTextarea();
 
     const newHistory = [...history, { role: "user", content: text }];
     setHistory(newHistory);
@@ -70,6 +232,9 @@ export default function ChatAssistant({ onClose }) {
 
       if (!response.ok) {
         const errorPayload = await response.json().catch(() => null);
+        if (response.status === 404) {
+          throw new Error("API route not found. Run with `vercel dev` for local /api/chat support.");
+        }
         throw new Error(errorPayload?.error || `API Error: ${response.status}`);
       }
 
@@ -78,6 +243,7 @@ export default function ChatAssistant({ onClose }) {
 
       setHistory((prev) => [...prev, { role: "assistant", content: reply }]);
       setChatMessages((prev) => [...prev, { sender: "bot", text: reply }]);
+      speakReply(reply);
     } catch (error) {
       console.error("Chat Error:", error);
       setChatMessages((prev) => [
@@ -192,6 +358,36 @@ export default function ChatAssistant({ onClose }) {
 
             <button
               type="button"
+              onClick={toggleVoiceInput}
+              className={`chat-mic ${isListening ? "chat-mic--active" : ""}`}
+              aria-label={isListening ? "Stop voice input" : "Start voice input"}
+              title={isSpeechSupported ? "Use microphone" : "Mic permission only (speech-to-text unsupported)"}
+            >
+              {isListening ? "Stop Mic" : isSpeechSupported ? "Mic" : "Enable Mic"}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                if (!isTtsSupported) {
+                  setTtsError("Voice output works best in Chrome/Edge.");
+                  return;
+                }
+                if (isTtsEnabled) {
+                  window.speechSynthesis?.cancel();
+                }
+                setTtsError("");
+                setIsTtsEnabled((prev) => !prev);
+              }}
+              className={`chat-tts ${isTtsEnabled ? "chat-tts--active" : ""}`}
+              aria-label={isTtsEnabled ? "Disable voice output" : "Enable voice output"}
+              title={isTtsEnabled ? "Voice output on" : "Voice output off"}
+            >
+              {isTtsEnabled ? "Voice On" : "Voice Off"}
+            </button>
+
+            <button
+              type="button"
               onClick={() => sendMessage()}
               disabled={isTyping}
               className="chat-send"
@@ -200,7 +396,13 @@ export default function ChatAssistant({ onClose }) {
             </button>
           </div>
 
-          <p className="chat-input-note">Press Enter to send. Use Shift + Enter for a new line.</p>
+          <p className="chat-input-note">
+            Press Enter to send. Use Shift + Enter for a new line.
+            {isListening ? " Listening... speak now." : ""}
+            {isTtsEnabled ? " Assistant voice is on." : ""}
+          </p>
+          {micError ? <p className="chat-input-error">{micError}</p> : null}
+          {ttsError ? <p className="chat-input-error">{ttsError}</p> : null}
         </div>
       </div>
     </div>
