@@ -71,7 +71,7 @@ const SMART_REPLIES = [
   {
     match: ["resume", "share resume", "resume details"],
     reply:
-      "**About Vikram's resume:**\n\nHis resume is meant to give a compact overview of his **education, technical skills, project experience, and AI/ML focus areas**. It works best as a quick hiring summary if you want to review his background without going section by section through the portfolio.\n\nYou can open it here: /Vikram_Thakur_Resume.pdf\n\nThe resume section on the site also includes direct view and download options.",
+      "**About Vikram's resume:**\n\nHis resume gives a compact overview of his **education, technical skills, project experience, and AI/ML focus areas**. It is useful when you want a quick hiring summary without browsing the full portfolio.\n\nView Resume: /resume.html\nDownload Resume: /Vikram_Thakur_Resume.pdf",
   },
 ];
 

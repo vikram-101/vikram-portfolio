@@ -180,6 +180,7 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState(initialForm);
   const [formState, setFormState] = useState("");
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
 
   const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -241,7 +242,7 @@ export default function App() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleContactSubmit = (event) => {
+  const handleContactSubmit = async (event) => {
     event.preventDefault();
 
     const { name, email, projectType, message } = formData;
@@ -250,16 +251,43 @@ export default function App() {
       return;
     }
 
-    const subject = encodeURIComponent(
-      `Portfolio enquiry from ${name.trim()}${projectType ? ` - ${projectType.trim()}` : ""}`
-    );
-    const body = encodeURIComponent(
-      `Name: ${name.trim()}\nEmail: ${email.trim()}\nProject Type: ${projectType.trim() || "Not specified"}\n\nMessage:\n${message.trim()}`
-    );
+    setIsSubmittingForm(true);
+    setFormState("Sending your message...");
 
-    window.location.href = `mailto:vt594925@gmail.com?subject=${subject}&body=${body}`;
-    setFormState("Your email app is opening with the drafted message.");
-    setFormData(initialForm);
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/vt594925@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          message: `Project Type: ${projectType.trim() || "Not specified"}\n\n${message.trim()}`,
+          _subject: `Portfolio enquiry from ${name.trim()}${projectType ? ` - ${projectType.trim()}` : ""}`,
+          _captcha: "false",
+          _template: "table",
+        }),
+      });
+
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok || result?.success === "false") {
+        throw new Error(result?.message || "Unable to send message right now.");
+      }
+
+      setFormState("Message sent successfully. Vikram will receive it directly by email.");
+      setFormData(initialForm);
+    } catch (error) {
+      setFormState(
+        error instanceof Error
+          ? `Message could not be sent: ${error.message}`
+          : "Message could not be sent right now. Please try again."
+      );
+    } finally {
+      setIsSubmittingForm(false);
+    }
   };
 
   return (
@@ -343,7 +371,7 @@ export default function App() {
                 <button type="button" className="btn btn--primary" onClick={() => scrollTo("work")}>
                   Explore Projects
                 </button>
-                <a href="/Vikram_Thakur_Resume.pdf" target="_blank" rel="noreferrer" className="btn btn--ghost">
+                <a href="/resume.html" target="_blank" rel="noreferrer" className="btn btn--ghost">
                   View Resume
                 </a>
               </div>
@@ -490,7 +518,7 @@ export default function App() {
                 work, education, and technical profile.
               </p>
               <div className="button-row">
-                <a href="/Vikram_Thakur_Resume.pdf" target="_blank" rel="noreferrer" className="btn btn--primary">
+                <a href="/resume.html" target="_blank" rel="noreferrer" className="btn btn--primary">
                   View Resume
                 </a>
                 <a href="/Vikram_Thakur_Resume.pdf" download className="btn btn--secondary">
@@ -755,8 +783,8 @@ export default function App() {
                 </label>
 
                 <div className="contact-form__actions">
-                  <button type="submit" className="btn btn--primary">
-                    Send Enquiry
+                  <button type="submit" className="btn btn--primary" disabled={isSubmittingForm}>
+                    {isSubmittingForm ? "Sending..." : "Send Enquiry"}
                   </button>
                   <a href="https://github.com/vikram-101" target="_blank" rel="noreferrer" className="btn btn--ghost">
                     View GitHub
