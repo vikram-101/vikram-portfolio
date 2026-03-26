@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 
 const QUICK_ASKS = [
-  "Tell me about Vikram",
-  "What are his skills?",
-  "Show me his projects",
-  "What is his education?",
-  "How can I contact Vikram?",
-  "Why should we hire Vikram?",
-  "Share his resume",
+  "Give me a quick profile summary",
+  "What makes Vikram hireable?",
+  "Show the strongest projects",
+  "Summarize his core skills",
+  "What is his education background?",
+  "How can I contact him?",
+  "Share resume details",
 ];
 
 function formatText(text) {
@@ -15,6 +15,14 @@ function formatText(text) {
     .replace(/\*\*(.*?)\*\*/g, "<strong class='chat-rich-strong'>$1</strong>")
     .replace(/\*(.*?)\*/g, "<em>$1</em>")
     .replace(/`(.*?)`/g, "<span class='chat-rich-code'>$1</span>")
+    .replace(
+      /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
+      "<a href='mailto:$&' class='chat-rich-link'>$&</a>"
+    )
+    .replace(
+      /(^|[\s>])((\/[A-Za-z0-9._/-]+\.pdf))/g,
+      "$1<a href='$2' target='_blank' rel='noopener noreferrer' class='chat-rich-link'>$2</a>"
+    )
     .replace(
       /(https?:\/\/[^\s<]+)/g,
       "<a href='$1' target='_blank' rel='noopener noreferrer' class='chat-rich-link'>$1</a>"
@@ -25,9 +33,53 @@ function formatText(text) {
 const INITIAL_CHAT = [
   {
     sender: "bot",
-    text: "Hello. I am Vikram's AI assistant.\n\nI can help with **skills**, **projects**, **education**, **resume**, and hiring-related questions.\n\nAsk anything about Vikram's profile.",
+    text: "Welcome. I am **Vikram's portfolio assistant**.\n\nI can help you review his **skills**, **projects**, **education**, **resume**, and overall **hiring fit**.\n\nYou can ask for a quick summary, strongest projects, or the best way to contact him.",
   },
 ];
+
+const SMART_REPLIES = [
+  {
+    match: ["quick profile summary", "about vikram", "profile summary", "introduce vikram"],
+    reply:
+      "**Vikram Thakur** is a Computer Science student focused on **AI and machine learning**.\n\nHis profile is built around practical ML systems, NLP, computer vision, and deployment-ready project work. A strong part of his portfolio is that he not only builds technical projects, but also presents them in a clear and professional way for recruiters and clients.",
+  },
+  {
+    match: ["hireable", "why should we hire", "why hire", "hiring fit"],
+    reply:
+      "**Why Vikram is a strong hire:**\n\n- He works across **ML, NLP, computer vision, and Python**.\n- He builds projects that are not only technical, but also **usable and presentation-ready**.\n- His portfolio shows a strong focus on **clear delivery, deployment, and professional communication**.",
+  },
+  {
+    match: ["strongest projects", "best projects", "show projects", "projects"],
+    reply:
+      "**Strongest visible projects:**\n\n- **Insurance Cost Predictor**: a machine-learning web app that predicts insurance charges and shows Vikram's ability to turn tabular ML into a usable product experience.\n- **Emotion Detector**: a real-time facial emotion recognition project that reflects hands-on computer vision work.\n- **Sentiment Analyzer**: an NLP workflow using BERT for text classification.\n- **Spam Message Detector**: a Flask-based classification app showing applied ML delivery.\n\nUseful links:\n- Insurance Predictor Demo: https://insurance-predictor-2-omxp.onrender.com/\n- Insurance Predictor GitHub: https://github.com/vikram-101/insurance-predictor\n- Spam Detector Demo: https://spam-flask-app-3.onrender.com",
+  },
+  {
+    match: ["core skills", "skills", "technical strengths"],
+    reply:
+      "**Core skills:**\n\nVikram's strengths are centered on **Machine Learning, Deep Learning, NLP, Computer Vision, and Python-based development**.\n\nHe is comfortable with model evaluation, transformer-based text workflows, computer vision pipelines, and deployment-oriented project building. His portfolio also shows an ability to present technical work cleanly, which is valuable in both internships and client-facing environments.",
+  },
+  {
+    match: ["education", "education background", "study"],
+    reply:
+      "**Education summary:**\n\nVikram is a **Computer Science student** specializing in **Artificial Intelligence and Machine Learning**.\n\nHis academic direction is closely aligned with the kind of work shown in the portfolio, especially across machine learning systems, NLP, computer vision, and practical project development.",
+  },
+  {
+    match: ["contact", "email", "linkedin", "reach", "hire him"],
+    reply:
+      "**Best ways to contact Vikram:**\n\nFor direct communication, email is the fastest option. LinkedIn is best for professional outreach, and GitHub is useful if you want to review his technical work first.\n\n- Email: vt594925@gmail.com\n- LinkedIn: https://linkedin.com/in/vikram-thakur\n- GitHub: https://github.com/vikram-101",
+  },
+  {
+    match: ["resume", "share resume", "resume details"],
+    reply:
+      "**About Vikram's resume:**\n\nHis resume is meant to give a compact overview of his **education, technical skills, project experience, and AI/ML focus areas**. It works best as a quick hiring summary if you want to review his background without going section by section through the portfolio.\n\nYou can open it here: /Vikram_Thakur_Resume.pdf\n\nThe resume section on the site also includes direct view and download options.",
+  },
+];
+
+function getSmartReply(input) {
+  const normalized = input.toLowerCase();
+  const match = SMART_REPLIES.find((item) => item.match.some((term) => normalized.includes(term)));
+  return match ? match.reply : null;
+}
 
 export default function ChatAssistant({ onClose }) {
   const [chatInput, setChatInput] = useState("");
@@ -228,6 +280,19 @@ export default function ChatAssistant({ onClose }) {
     const newHistory = [...history, { role: "user", content: text }];
     setHistory(newHistory);
     setChatMessages((prev) => [...prev, { sender: "user", text }]);
+
+    const smartReply = getSmartReply(text);
+    if (smartReply) {
+      setIsTyping(true);
+      window.setTimeout(() => {
+        setHistory((prev) => [...prev, { role: "assistant", content: smartReply }]);
+        setChatMessages((prev) => [...prev, { sender: "bot", text: smartReply }]);
+        speakReply(smartReply);
+        setIsTyping(false);
+      }, 350);
+      return;
+    }
+
     setIsTyping(true);
 
     try {
@@ -278,19 +343,23 @@ export default function ChatAssistant({ onClose }) {
         <div className="chat-window__glow chat-window__glow--one" />
         <div className="chat-window__glow chat-window__glow--two" />
 
-        <button type="button" onClick={onClose} className="chat-close">
-          Close
-        </button>
-
         <header className="chat-header">
-          <div className="chat-avatar">VT</div>
-          <div className="chat-header__copy">
-            <h3>Vikram AI Assistant</h3>
-            <p>Portfolio guide for recruiters, clients, and collaborators</p>
+          <div className="chat-header__main">
+            <div className="chat-avatar">VT</div>
+            <div className="chat-header__copy">
+              <h3>Vikram Portfolio Assistant</h3>
+              <p>Professional guide for recruiters, clients, and collaborators</p>
+            </div>
           </div>
-          <div className="chat-status">
-            <span />
-            Online
+
+          <div className="chat-header__actions">
+            <div className="chat-status">
+              <span />
+              Available
+            </div>
+            <button type="button" onClick={onClose} className="chat-close">
+              Close
+            </button>
           </div>
         </header>
 
@@ -308,6 +377,13 @@ export default function ChatAssistant({ onClose }) {
         </div>
 
         <div className="chat-messages">
+          <div className="chat-intro-card">
+            <span className="chat-intro-card__label">Portfolio Concierge</span>
+            <p>
+              Ask for a summary, strongest projects, resume details, skills, education, or hiring fit.
+            </p>
+          </div>
+
           {chatMessages.map((message, index) => (
             <div
               key={`${message.sender}-${index}`}
@@ -352,7 +428,7 @@ export default function ChatAssistant({ onClose }) {
               ref={textareaRef}
               value={chatInput}
               rows={1}
-              placeholder="Ask about Vikram's work, skills, resume, or contact details..."
+              placeholder="Ask about projects, technical strengths, resume, education, or hiring fit..."
               onChange={(event) => {
                 setChatInput(event.target.value);
                 event.target.style.height = "auto";
@@ -374,7 +450,7 @@ export default function ChatAssistant({ onClose }) {
               aria-label={isListening ? "Stop voice input" : "Start voice input"}
               title={isSpeechSupported ? "Use microphone" : "Mic permission only. Speech-to-text works best in Chrome or Edge."}
             >
-              {isListening ? "Stop Mic" : isSpeechSupported ? "Mic" : "Enable Mic"}
+              {isListening ? "Stop Mic" : isSpeechSupported ? "Voice Input" : "Enable Mic"}
             </button>
 
             <button
@@ -409,8 +485,8 @@ export default function ChatAssistant({ onClose }) {
 
           <p className="chat-input-note">
             Press Enter to send. Use Shift + Enter for a new line.
-            {isListening ? " Listening... speak now." : ""}
-            {isTtsEnabled ? " Assistant voice is on." : ""}
+            {isListening ? " Voice capture is active." : ""}
+            {isTtsEnabled ? " Assistant voice reply is enabled." : ""}
             {!isSpeechSupported ? " Live speech-to-text depends on browser support." : ""}
           </p>
           {micError ? <p className="chat-input-error">{micError}</p> : null}
