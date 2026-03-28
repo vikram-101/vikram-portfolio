@@ -162,7 +162,6 @@ const serviceCards = [
 const contactItems = [
   ["Email", "vt594925@gmail.com", "mailto:vt594925@gmail.com"],
   ["GitHub", "github.com/vikram-101", "https://github.com/vikram-101"],
-  ["LinkedIn", "linkedin.com/in/vikram-thakur", "https://linkedin.com/in/vikram-thakur"],
   ["Location", "India", ""],
 ];
 

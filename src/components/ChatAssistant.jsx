@@ -64,9 +64,9 @@ const SMART_REPLIES = [
       "**Education summary:**\n\nVikram is a **Computer Science student** specializing in **Artificial Intelligence and Machine Learning**.\n\nHis academic direction is closely aligned with the kind of work shown in the portfolio, especially across machine learning systems, NLP, computer vision, and practical project development.",
   },
   {
-    match: ["contact", "email", "linkedin", "reach", "hire him"],
+    match: ["contact", "email", "reach", "hire him"],
     reply:
-      "**Best ways to contact Vikram:**\n\nFor direct communication, email is the fastest option. LinkedIn is best for professional outreach, and GitHub is useful if you want to review his technical work first.\n\n- Email: vt594925@gmail.com\n- LinkedIn: https://linkedin.com/in/vikram-thakur\n- GitHub: https://github.com/vikram-101",
+      "**Best ways to contact Vikram:**\n\nFor direct communication, email is the fastest option, and GitHub is useful if you want to review his technical work first.\n\n- Email: vt594925@gmail.com\n- GitHub: https://github.com/vikram-101",
   },
   {
     match: ["resume", "share resume", "resume details"],
